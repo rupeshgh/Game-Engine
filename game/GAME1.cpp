@@ -29,14 +29,15 @@ void Game::init(const std::string & configs)
 	//std::ifstream fin(configs);	
 	//m_window.setVerticalSyncEnabled(true);
 	//m_window.setFramerateLimit(1200);
-	spawnPlayer();
-	spawnEnemy();
+	
 }
 
 
 
 
 void Game::run() {
+	spawnPlayer();
+	spawnEnemy();
 	int score = 0;
 	
 	sf::Texture t;
@@ -62,7 +63,7 @@ void Game::run() {
 	t.setRepeated(true);
 	sf::Sprite sprite(t);
 	
-	sprite.setTextureRect(sf::IntRect(0, 0, 1280, 720));
+	sprite.setTextureRect(sf::IntRect(0, 0, 1380, 720));
 	sprite.setTexture(t);
 	
 	
@@ -83,12 +84,10 @@ void Game::run() {
 		sf::Event event;
 		while (m_window.pollEvent(event))
 		{
-		// "close requested" event: we close the window
+				// "close requested" event: we close the window
 			if (event.type == sf::Event::Closed) {
 				m_window.close();
 			}
-
-
 		}
 
 		m_currentFrame++;	
@@ -116,8 +115,8 @@ void Game::updatedeltatime() {
 void Game::spawnPlayer() {
 	srand((unsigned int)time(NULL));
 	auto entity = m_entities.addEntity("entity");
-	entity->cTransform = std::make_shared<CTransform>(Vec2(628.0f, 351.0f), Vec2(0.05f, 0.05f), 0.5f); //positon,velocity,angle
-	entity->cShape = std::make_shared<CShape>(15.0f, 8, sf::Color(10, 10, 10), sf::Color(255, 0, 0), 8.0f);	
+	entity->cTransform = std::make_shared<CTransform>(Vec2(628.0f, 351.0f), Vec2(0.02f, 0.02f), 0.5f); //positon,velocity,angle
+	entity->cShape = std::make_shared<CShape>(12.0f, 8, sf::Color(10, 10, 10), sf::Color(255, 0, 0), 5.0f);	
 	entity->cTransform->angle += 0.40f;
 	entity->cShape->circle.setRotation(entity->cTransform->angle);
 	//add input compnent
@@ -126,19 +125,19 @@ void Game::spawnPlayer() {
 		}
 
 
+
+
 	void Game::spawnEnemy() {
-		
-		srand(time(0));
-		//std::shared_ptr<Entity>m_enemy;
-			for (int i = 0; i <= 10; i++) {
+				
+			for (int i = 1; i <= 18; i++) {
 			auto enemy = m_entities.addEntity("enemy");
-			float x =  rand() %1200 +1.0;
-			float y =  rand() % 700 +1.0;					
+			float x =  rand() %1200  ;
+			float y =  rand() % 700 ;
+			int j = rand() % 6+3;				
 		   	enemy->cTransform = std::make_shared<CTransform>(Vec2(x, y), Vec2(0.15f, 0.15f), 5.55f); //positon,velocity,angle
-			enemy->cShape = std::make_shared<CShape>(12.0f, rand()%8, sf::Color(10, 10, 10), sf::Color(rand() % 255, rand() % 255,  200), 5.0f);
-			//enemy->cShape = std::make_shared<CShape>(12.0f, 3, sf::Color(10, 10, 10), sf::Color(10, 10, 10), 5.0f);
-			//std::cout << " " << i << std::endl;
-			//std::cout << "x:" << x << "y: " << y << std::endl;
+			enemy->cShape = std::make_shared<CShape>(12.0f,j, sf::Color(rand() % 250, rand() % 250, rand() % 250), sf::Color(rand() % 250, rand() % 250, rand() % 250), 5.0f);
+			std::cout << " " << j << std::endl;
+			std::cout << "x:" << x << "y: " << y << std::endl;
 		}
 	}
 
@@ -146,16 +145,18 @@ void Game::spawnPlayer() {
 
 	void Game::spawnSmallEnemies(std::shared_ptr<Entity> entity) {
 
-		float angle = 360.0 / (float)entity->cShape->circle.getPointCount();
+		float angle = 360.0 / entity->cShape->circle.getPointCount();
+		float rad = angle * 0.0174533;
 		auto c = entity->cShape->circle.getPointCount();
-		for (unsigned int i = 0; i < c; i++) {
+		
+		for ( unsigned int i = 0; i < c; i++) {
+			auto ang = rad * i;
 			auto se = m_entities.addEntity("smallenemy");
-			se->cLifespan = std::make_shared<CLifespan>(2000, m_currentFrame);
+			se->cLifespan = std::make_shared<CLifespan>(1000, m_currentFrame);
 			se->cTransform = std::make_shared<CTransform>(Vec2(entity->cTransform->pos.x, entity->cTransform->pos.y), Vec2(0.05f, 0.05f), 0.05f);
-			se->cShape = std::make_shared<CShape>(entity->cShape->radius, entity->cShape->circle.getPointCount(), entity->cShape->circle.getFillColor(), entity->cShape->circle.getOutlineColor(), entity->cShape->circle.getOutlineThickness());
+			se->cShape = std::make_shared<CShape>(entity->cShape->circle.getRadius()/c, entity->cShape->circle.getPointCount(), entity->cShape->circle.getFillColor(), entity->cShape->circle.getOutlineColor(), entity->cShape->circle.getOutlineThickness());
 			se->cTransform->angle += 1.50f;
-			//se->cTransform = std::make_shared<CTransform>(Vec2(se->cTransform->pos.x, se->cTransform->pos.y), Vec2(0.15f, 0.15f), 0.05f);
-
+			se->cTransform = std::make_shared<CTransform>(Vec2(se->cTransform->pos.x, se->cTransform->pos.y), Vec2(0.15*cos(ang), 0.15f*sin(ang)), 0.05f);
 		}
 	}
 
@@ -200,7 +201,7 @@ void Game::spawnPlayer() {
 		
 		for (auto e : m_entities.getEntities("enemy")) {
 
-			if (e->cTransform->pos.x <0) {
+			if (e->cTransform->pos.x<0||e->cTransform->pos.y<0) {
 					e->cTransform->velocity.x = abs(e->cTransform->velocity.x);
 				
 
@@ -213,7 +214,7 @@ void Game::spawnPlayer() {
 				
 			}
 			
-			if (e->cTransform->pos.x > m_window.getSize().x ) {
+			if (e->cTransform->pos.x > m_window.getSize().x|| e->cTransform->pos.y > m_window.getSize().y) {
 				e->cTransform->velocity.x = -e->cTransform->velocity.x;
 
 				if (e->cTransform->pos.y > m_window.getSize().y )
@@ -228,21 +229,21 @@ void Game::spawnPlayer() {
 			
 
 		
-				//e->cTransform->pos.x += e->cTransform->velocity.x;
-				//e->cTransform->pos.y += e->cTransform->velocity.y;
+				e->cTransform->pos.x += e->cTransform->velocity.x;
+				e->cTransform->pos.y += e->cTransform->velocity.y;
 			
 			
 			
 					
 		}
 
-		if(m_entities.getEntities("smallenemy").size()!=0){
+		//if(m_entities.getEntities("smallenemy").size()!=0){
 			for (auto e : m_entities.getEntities("smallenemy")) {
 				e->cShape->circle.setPosition(e->cTransform->pos.x, e->cTransform->pos.y);
 				e->cTransform->pos.x += e->cTransform->velocity.x;
 				e->cTransform->pos.y += e->cTransform->velocity.y;
 
-			}
+			//}
 		}
 
 			   		
@@ -254,7 +255,7 @@ void Game::spawnPlayer() {
 
 			}
 			else {
-					m_player->cTransform->pos.y += -500.0f * dt;
+					m_player->cTransform->pos.y += -350 * dt;
 								
 			}
 
@@ -270,7 +271,7 @@ void Game::spawnPlayer() {
 
 			}
 			else {
-				m_player->cTransform->pos.y += 500.0f * dt;
+				m_player->cTransform->pos.y += 350.0f * dt;
 				
 			}
 		
@@ -285,7 +286,7 @@ void Game::spawnPlayer() {
 
 			}
 			else {
-					m_player->cTransform->pos.x += -500.0f * dt;
+					m_player->cTransform->pos.x += -350.0f * dt;
 				
 							}
 
@@ -301,7 +302,7 @@ void Game::spawnPlayer() {
 
 			}
 			else {
-				m_player->cTransform->pos.x += 500.0f * dt;
+				m_player->cTransform->pos.x += 350.0f * dt;
 
 						}
 
@@ -343,7 +344,7 @@ void Game::spawnPlayer() {
 			for (auto e : m_entities.getEntities("enemy")) {
 				
 				if ((abs(e->cTransform->pos.x -b->cTransform->pos.x)<10.0) && (abs(e->cTransform->pos.y - b->cTransform->pos.y)<10.0)) {
-
+					spawnSmallEnemies(e);
 					
 					++score;
 					//std::cout << "Score: " << score;
@@ -353,7 +354,7 @@ void Game::spawnPlayer() {
 					
 					e->destroy();
 					b->destroy();
-					//spawnSmallEnemies(e);
+					
 					
 				}
 			}
@@ -367,7 +368,11 @@ void Game::spawnPlayer() {
 
 	void Game::sEnemySpawner() {
 
-
+		auto e_count = m_entities.getEntities("enemy");
+		if (e_count.size() < 10) {
+			spawnEnemy();
+		}
+			 
 	}
 
 

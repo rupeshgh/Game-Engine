@@ -1,7 +1,8 @@
 ﻿  GAME1.cpp
-d:\visual studio\game\game\game1.cpp(74): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-d:\visual studio\game\game\game1.cpp(131): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-d:\visual studio\game\game\game1.cpp(135): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-d:\visual studio\game\game\game1.cpp(136): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\visual studio\game\game\game1.cpp(75): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+d:\visual studio\game\game\game1.cpp(134): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+d:\visual studio\game\game\game1.cpp(135): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+d:\visual studio\game\game\game1.cpp(148): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 d:\visual studio\game\game\game1.cpp(149): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+d:\visual studio\game\game\game1.cpp(159): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   game.vcxproj -> D:\visual studio\game\Debug\game.exe
