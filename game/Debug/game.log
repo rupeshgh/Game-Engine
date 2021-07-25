@@ -5,4 +5,7 @@ d:\visual studio\game\game\game1.cpp(135): warning C4244: 'initializing': conver
 d:\visual studio\game\game\game1.cpp(148): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 d:\visual studio\game\game\game1.cpp(149): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 d:\visual studio\game\game\game1.cpp(159): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-  game.vcxproj -> D:\visual studio\game\Debug\game.exe
+d:\visual studio\game\game\game1.cpp(197): error C3867: 'sf::Shape::getOutlineThickness': non-standard syntax; use '&' to create a pointer to member
+d:\visual studio\game\game\game1.cpp(197): error C2296: '-': illegal, left operand has type 'float (__thiscall sf::Shape::* )(void) const'
+d:\visual studio\game\game\game1.cpp(376): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+d:\visual studio\game\game\game1.cpp(377): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
